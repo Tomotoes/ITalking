@@ -102,7 +102,7 @@ Click here to download [App](https://github.com/Tomotoes/ITalking/releases).
 
 Feel free to open issues or PRs for any problem you may encounter, typos that you see or aspects that are confusing. Contributions are welcome, open an issue or email me if you have something you want to work on.
 
-Please read [CONTRIBUTING.md](https://github.com/Tomotoes/ITakling/blob/master/CONTRIBUTING.md) for details on this project.
+Please read [CONTRIBUTING.md](https://github.com/Tomotoes/ITalking/blob/master/CONTRIBUTING.md) for details on this project.
 
 ## 🎨TODO
 
