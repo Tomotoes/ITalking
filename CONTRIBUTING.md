@@ -66,6 +66,113 @@ create database ITalking;
 
 3. Deploy the build folder.
 
+## Deploy
+
+### Files
+
+1. scp -r server/bin root@ip:/root/ITalking
+2. scp -r server/.env root@ip:/root/ITalking
+3. scp -r fronted/build root@ip:/root/ITakling
+
+### Nginx
+
+1. sudo yum install epel-release
+
+2. sudo yum install certbot-nginx
+
+3. sudo yum install nginx
+
+4. sudo systemctl start nginx
+
+5. sudo vim /etc/nginx/nginx.conf
+
+   user root;
+
+   server_name italking.tomotoes.com;
+
+   root => /root/ITalking/build
+
+   location => try_files $uri /index.html;
+
+   location /v1 {
+      proxy_pass http://ip:port; 
+
+      \# Domain name and port corresponding to. env
+   }
+
+   :x exit
+
+   sudo nginx -t
+
+   sudo systemctl reload nginx
+
+6. sudo iptables -I INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+
+   sudo iptables -I INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+
+   - sudo firewall-cmd --add-service=http
+   - sudo firewall-cmd --add-service=https
+   - sudo firewall-cmd --runtime-to-permanent
+
+7. sudo certbot --nginx -d italking.tomotoes.com
+
+   input your email;
+
+8. sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+
+9. sudo vim /etc/nginx/nginx.conf
+
+   ssl_dhparam /etc/ssl/certs/dhparam.pem;
+
+   :x exit
+
+   sudo nginx -t
+
+   sudo systemctl reload nginx
+
+10. sudo crontab -e
+
+    15 3 * * * /usr/bin/certbot renew --quiet
+
+### Redis
+
+1. sudo yum install epel-release
+2. sudo yum install redis -y
+3. sudo systemctl start redis.service
+
+### MySQL
+
+1. sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+
+2. sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
+
+3. sudo yum install mysql-server
+
+4. sudo systemctl start mysqld
+
+5. sudo grep 'temporary password' /var/log/mysqld.log
+
+6. mysql -u root -p
+
+7. create database DATABASE;
+
+8. SET GLOBAL validate_password.policy=LOW;
+
+   SET GLOBAL validate_password.length = 6;
+
+   SET GLOBAL validate_password.number_count = 0;
+
+9. ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
+
+   \# Database and password corresponding to. env
+
+10. sudo systemctl restart mysqld
+
+### Run
+
+1. env GIN_MODE=release ./ITalking/bin
+2. Enjoy it!
+
 ## Code of Conduct
 
 The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
