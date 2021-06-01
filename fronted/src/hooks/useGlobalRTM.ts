@@ -13,10 +13,14 @@ type UserLogin = () => Promise<void>
 type UserLogout = () => Promise<void>
 type SendMessage = (message: Message) => Promise<void>
 
-export interface GlobalRTMApi { login: UserLogin, logout: UserLogout, sendMessage: SendMessage }
+export interface GlobalRTMApi {
+  login: UserLogin
+  logout: UserLogout
+  sendMessage: SendMessage
+}
 
 const useGlobalRTM: () => GlobalRTMApi = () => {
-  const [globalChannel, setGlobalChannel] = useState<RtmChannel|undefined>()
+  const [globalChannel, setGlobalChannel] = useState<RtmChannel | undefined>()
   const user = useSelector((state: RootState) => state.UserModel)
   const global = useSelector((state: RootState) => state.GlobalModel)
   const feed = useSelector((state: RootState) => state.FeedModel)
@@ -24,7 +28,13 @@ const useGlobalRTM: () => GlobalRTMApi = () => {
   const location = useLocation()
 
   useEffect(() => {
-    window.rtmClient = AgoraRTM.createInstance(App.AgoraAppId)
+    const config = App.isProduction
+      ? {
+          enableLogUpload: false,
+          logFilter: AgoraRTM.LOG_FILTER_OFF
+        }
+      : {}
+    window.rtmClient = AgoraRTM.createInstance(App.AgoraAppId, config)
   }, [])
 
   useEffect(() => {

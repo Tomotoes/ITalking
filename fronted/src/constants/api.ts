@@ -1,6 +1,6 @@
 const Api = {
   Timeout: 1000 * 5,
-  BaseUrl: 'https://api.tomotoes.com/v1',
+  BaseUrl: '/v1',
   Entry: {
     SignIn: '/entry/signIn',
     Login: '/entry/login',

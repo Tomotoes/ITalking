@@ -39,6 +39,10 @@ const useRTC: () => RTCApi = () => {
   const $ = useDispatch<Dispatch>()
 
   useEffect(() => {
+    if (App.isProduction) {
+      AgoraRTC.setLogLevel(4)
+      AgoraRTC.disableLogUpload()
+    }
     const supportAgora = AgoraRTC.checkSystemRequirements()
     if (!supportAgora) {
       message.warn('您的浏览器版本过低，暂不支持语音交流功能')

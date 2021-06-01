@@ -21,5 +21,4 @@ func main() {
 	_ = sentry.Init(sentry.ClientOptions{Dsn: config.SentryDSN})
 	defer sentry.Flush(2 * time.Second)
 	log.Fatal(app.Run(config.GetServerAddress()))
-	//log.Fatal(autotls.Run(app, config.GetServerAddress()))
 }
