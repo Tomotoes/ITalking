@@ -83,12 +83,11 @@ const Reservation: React.FC = () => {
                         <S.RoomBtn onClick={() => updateReservation(reservation)}>
                           <Button icon={<FormOutlined/>}/>
                         </S.RoomBtn>
-                        <S.RoomBtn id={reservation.id}>
+                        <S.RoomBtn>
                           <Popconfirm title="删除要该预订房间吗？" okText="删除" cancelText="取消"
                                       onConfirm={async () => await $.ReservationModel.deleteAsync(reservation.id!)}
                                       cancelButtonProps={{ type: 'text' }}
                                       okButtonProps={{ type: 'link' }}
-                                      getPopupContainer={() => document.getElementById(reservation.id!)!}
                           >
                             <Button danger icon={<DeleteOutlined/>}/>
                           </Popconfirm>
