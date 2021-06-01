@@ -7,6 +7,7 @@ import * as S from './styles'
 import Container from 'common/Landing/Container'
 import SvgIcon from 'common/SvgIcon'
 import { scrollTo } from 'helpers/browser'
+import App from 'constants/app'
 
 interface Props {
   href: string
@@ -41,7 +42,7 @@ const Footer: React.FC = () => {
             <Row justify="space-between">
               <Col lg={10} md={10} sm={12} xs={24}>
                 <S.Language>{t('Footer.Contact')}</S.Language>
-                <S.Large href="mailto:simon@tomotoes.com">{t('Footer.Tell us everything')}</S.Large>
+                <S.Large href={App.AuthorUrl} target="_blank">{t('Footer.Tell us everything')}</S.Large>
                 <S.Para>
                   {t('Footer.Question')}
                 </S.Para>
@@ -54,16 +55,10 @@ const Footer: React.FC = () => {
                 <S.Large href="mailto:simon@tomotoes.com" left>
                   {t('Footer.Business Cooperation')}
                 </S.Large>
-                <S.Large left href="mailto:simon@tomotoes.com">
-                  {t('Footer.Media Interview')}
-                </S.Large>
               </Col>
               <Col lg={6} md={6} sm={12} xs={24}>
                 <S.Title>{t('Footer.Help')}</S.Title>
-                <S.Large left href="mailto:simon@tomotoes.com">
-                  {t('Footer.Self Check')}
-                </S.Large>
-                <S.Large left href="mailto:simon@tomotoes.com">
+                <S.Large left href={App.IssuesUrl} target="_blank">
                   {t('Footer.Safe Feedback')}
                 </S.Large>
               </Col>
@@ -125,7 +120,7 @@ const Footer: React.FC = () => {
               </S.NavLink>
               <S.FooterContainer>
                 <SocialLink
-                  href="https://github.com/Tomotoes"
+                  href="https://github.com/Tomotoes/ITalking"
                   src="github.svg"
                 />
                 <SocialLink

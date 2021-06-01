@@ -10,6 +10,7 @@ import RouteMap from 'types/route'
 import useRoom from 'hooks/useRoom'
 import { UserStatus } from 'models/user'
 import { Helmet } from 'react-helmet'
+import App from 'constants/app'
 
 const Setting: React.FC = () => {
   const user = useSelector((state: RootState) => state.UserModel)
@@ -33,7 +34,10 @@ const Setting: React.FC = () => {
     </Menu>
   )
   const fallback = () => {
-    window.open('mailto:simon@tomotoes.com', '_blank')
+    window.open(App.IssuesUrl, '_blank')
+  }
+  const contact = () => {
+    window.open(App.AuthorUrl, '_blank')
   }
   const logout = async () => {
     if (user.status !== UserStatus.Visitor) {
@@ -93,6 +97,9 @@ const Setting: React.FC = () => {
           <S.Item>
             <Button shape="round" onClick={fallback}>
               反馈问题
+            </Button>
+            <Button shape="round" onClick={contact}>
+              联系作者
             </Button>
           </S.Item>
           <S.Item>

@@ -39,7 +39,7 @@ const useRTC: () => RTCApi = () => {
   const $ = useDispatch<Dispatch>()
 
   useEffect(() => {
-    if (App.isProduction) {
+    if (App.IsProduction) {
       AgoraRTC.setLogLevel(4)
       AgoraRTC.disableLogUpload()
     }

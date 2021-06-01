@@ -28,7 +28,7 @@ const useGlobalRTM: () => GlobalRTMApi = () => {
   const location = useLocation()
 
   useEffect(() => {
-    const config = App.isProduction
+    const config = App.IsProduction
       ? {
           enableLogUpload: false,
           logFilter: AgoraRTM.LOG_FILTER_OFF

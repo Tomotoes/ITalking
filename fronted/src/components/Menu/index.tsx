@@ -47,7 +47,7 @@ const Menu: React.FC = () => {
   }
 
   const goMorePage = () => {
-    window.open('https://tomotoes.com', '_blank')
+    // window.open('https://tomotoes.com', '_blank')
   }
 
   const createRoom = async () => {

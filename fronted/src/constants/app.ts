@@ -1,4 +1,3 @@
-const isProduction = process.env.NODE_ENV === 'production'
 const App = {
   Host: 'https://italking.tomotoes.com',
   MaxMemberShowLength: 3,
@@ -18,7 +17,9 @@ const App = {
   RoomDescriptionMaxLength: 80,
   RequestSpeakingDisplayTime: 3e3,
   SoundEffectVolume: 0.7,
-  isProduction
+  IsProduction: process.env.NODE_ENV === 'production',
+  IssuesUrl: 'https://github.com/Tomotoes/ITalking/issues',
+  AuthorUrl: 'https://tomotoes.com'
 }
 
 export default App
