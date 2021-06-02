@@ -11,7 +11,7 @@ export const getCurrentTimeString = () => {
 export const formatHHMMString = (duration: number) => {
   const date = new Date(0)
   date.setSeconds(duration)
-  return date.toISOString().substr(14, 5)
+  return date.toISOString().substr(duration >= 3600 ? 11 : 14, 5)
 }
 
 export const formatRelativeTime = (time: string) => {

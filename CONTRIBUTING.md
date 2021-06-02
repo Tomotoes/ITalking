@@ -36,43 +36,59 @@ create database ITalking;
 
 2. Check and fill the parameters in the file.
 
-3. Generate executable file in the project root directory.
+3. Run the server.
 
    ```sh
-   go build -o server
+   go run main.go
    ```
 
-4. Start and execute the generated file.
-
-   ```sh
-   env GIN_MODE=release ./bin
-   ```
-
-5. Enjoy it!
 
 ### Fronted
 
-1. Installing project dependencies.
+1. Please rename the `env.sample` file under the project to `.env`
+
+2. Check and fill the parameters in the file.
+
+3. Installing project dependencies.
 
    ```sh
    yarn install
    ```
 
-2. Build Project.
+4. Run the front-end
 
    ```sh
-   yarn build
+   yarn start
    ```
 
-3. Deploy the build folder.
+### Proxy
+
+```
+https://italking.tomotoes.com/v1 Server running address/v1
+https://italking.tomotoes.com Front-end running address
+```
 
 ## Deploy
 
+The following will take my deployment of centos7 as an example.
+
 ### Files
 
-1. scp -r server/bin root@ip:/root/ITalking
-2. scp -r server/.env root@ip:/root/ITalking
-3. scp -r fronted/build root@ip:/root/ITakling
+1. Create folder in server
+
+   mkdir ITalking
+
+2. Generate static files of the front end in dev environment
+
+   yarn build 
+
+3. scp -r build {user}@ip:/root/ITalking
+
+4. Generate back-end binary files in dev environment
+
+   [GOOS=linux] go build -o bin
+
+5. scp {bin,.env} {user}@ip:/root/ITalking
 
 ### Nginx
 
@@ -86,21 +102,21 @@ create database ITalking;
 
 5. sudo vim /etc/nginx/nginx.conf
 
-   user root;
-
-   server_name italking.tomotoes.com;
-
-   root => /root/ITalking/build
-
-   location => try_files $uri /index.html;
-
+   ```
+user root;
+   
+server_name italking.tomotoes.com;
+   
+root => /{...}/ITalking/build
+   
+location => try_files $uri /index.html;
+   
    location /v1 {
-      proxy_pass http://ip:port; 
-
-      \# Domain name and port corresponding to. env
-   }
-
-   :x exit
+   proxy_pass http://ip:port; 
+   
+      # Domain name and port corresponding to. env
+}
+   ```
 
    sudo nginx -t
 
@@ -122,9 +138,9 @@ create database ITalking;
 
 9. sudo vim /etc/nginx/nginx.conf
 
+   ```
    ssl_dhparam /etc/ssl/certs/dhparam.pem;
-
-   :x exit
+   ```
 
    sudo nginx -t
 
@@ -170,12 +186,34 @@ create database ITalking;
 
 ### Run
 
-1. env GIN_MODE=release ./ITalking/bin
-2. Enjoy it!
+1. vim /etc/systemd/system/italking.service
 
-## Code of Conduct
+```
+[Unit]
+Description=ITalking Service
+After=network.target
+After=mysqld.service
+After=redis.service
+Requires=mysqld.service
+Requires=redis.service
 
-The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+[Service]
+ExecStart=/.../ITalking/bin
+WorkingDirectory=/.../ITalking
+User={user}
+Restart=always
+RestartSec=5
+Environment=GIN_MODE=release
+
+[Install]
+WantedBy=multi-user.target
+```
+
+2. systemctl start italking
+3. systemctl enable italking
+4. journalctl -u italking -f
+
+5. Enjoy it!
 
 ## Issues and PRs
 

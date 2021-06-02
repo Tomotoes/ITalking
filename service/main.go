@@ -18,7 +18,7 @@ func main() {
 	routes.Init(app)
 	dao.Init()
 	defer dao.G.Close()
-	_ = sentry.Init(sentry.ClientOptions{Dsn: config.SentryDSN})
+	_ = sentry.Init(sentry.ClientOptions{Dsn: config.GetSentryDSN()})
 	defer sentry.Flush(2 * time.Second)
 	log.Fatal(app.Run(config.GetServerAddress()))
 }

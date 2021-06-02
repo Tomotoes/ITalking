@@ -56,6 +56,7 @@ export const MessageAvatar = styled.div`
 export const MessageArea = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `
 
 export const MessageDetail = styled.div`

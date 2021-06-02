@@ -56,6 +56,10 @@ func GetAgoraCertificate() string {
 	return os.Getenv("AGORA_CERTIFICATE")
 }
 
+func GetSentryDSN() string {
+	return os.Getenv("SENTRY_DSN")
+}
+
 // Magic Number 专属于我
 const SessionKey = "wbxhxll"
 
@@ -68,4 +72,3 @@ const WelcomeNotification = "欢迎来到 ITalking，去结识那些陌生而有
 const FollowNotification = "关注了你~"
 
 const AdminID = "管理员"
-const SentryDSN = "https://cb59a36d8ab74143a0b1c5bd9790991b@o717267.ingest.sentry.io/5779800"
