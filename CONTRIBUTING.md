@@ -103,20 +103,19 @@ The following will take my deployment of centos7 as an example.
 5. sudo vim /etc/nginx/nginx.conf
 
    ```
-user root;
+   user root;
+   server_name italking.tomotoes.com;
    
-server_name italking.tomotoes.com;
+   root => /{...}/ITalking/build
    
-root => /{...}/ITalking/build
-   
-location => try_files $uri /index.html;
+   location => try_files $uri /index.html;
    
    location /v1 {
-   proxy_pass http://ip:port; 
-   
-      # Domain name and port corresponding to. env
-}
+   	proxy_pass http://ip:port; 
+   	# Domain name and port corresponding to. env
+   }
    ```
+
 
    sudo nginx -t
 
@@ -188,29 +187,31 @@ location => try_files $uri /index.html;
 
 1. vim /etc/systemd/system/italking.service
 
-```
-[Unit]
-Description=ITalking Service
-After=network.target
-After=mysqld.service
-After=redis.service
-Requires=mysqld.service
-Requires=redis.service
-
-[Service]
-ExecStart=/.../ITalking/bin
-WorkingDirectory=/.../ITalking
-User={user}
-Restart=always
-RestartSec=5
-Environment=GIN_MODE=release
-
-[Install]
-WantedBy=multi-user.target
-```
+   ```
+   [Unit]
+   Description=ITalking Service
+   After=network.target
+   After=mysqld.service
+   After=redis.service
+   Requires=mysqld.service
+   Requires=redis.service
+   
+   [Service]
+   ExecStart=/.../ITalking/bin
+   WorkingDirectory=/.../ITalking
+   User={user}
+   Restart=always
+   RestartSec=5
+   Environment=GIN_MODE=release
+   
+   [Install]
+   WantedBy=multi-user.target
+   ```
 
 2. systemctl start italking
+
 3. systemctl enable italking
+
 4. journalctl -u italking -f
 
 5. Enjoy it!
