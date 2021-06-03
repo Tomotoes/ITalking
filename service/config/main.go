@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 func Init() {
@@ -52,19 +53,33 @@ func GetAgoraAppId() string {
 	return os.Getenv("AGORA_APP_ID")
 }
 
+func GetAgoraAuthToken() string {
+	return os.Getenv("AGORA_AUTH_TOKEN")
+}
+
 func GetAgoraCertificate() string {
 	return os.Getenv("AGORA_CERTIFICATE")
+}
+
+func GetAgoraUserKey() string {
+	return os.Getenv("AGORA_USER_KEY")
+}
+
+func GetAgoraUserSecret() string {
+	return os.Getenv("AGORA_USER_SECRET")
 }
 
 func GetSentryDSN() string {
 	return os.Getenv("SENTRY_DSN")
 }
 
-// Magic Number 专属于我
 const SessionKey = "wbxhxll"
 
 const CookieExpireTime = 60 * 60 * 24 * 30
 const TokenExpireTime = 60 * 60 * 24
+const MaxCallLimit = 20
+
+const CheckRoomsPeriodicity = 10 * time.Minute
 
 const DefaultUserDescription = "这家伙很懒，还没有写简介"
 

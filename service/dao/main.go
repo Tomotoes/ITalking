@@ -2,14 +2,18 @@ package dao
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"italking.tomotoes.com/m/v1/config"
 	"italking.tomotoes.com/m/v1/ent"
 	"italking.tomotoes.com/m/v1/ent/notification"
+	"italking.tomotoes.com/m/v1/ent/room"
 	"italking.tomotoes.com/m/v1/ent/user"
+	"italking.tomotoes.com/m/v1/helper"
 	"log"
-
-	_ "github.com/go-sql-driver/mysql"
+	"sync"
+	"time"
 )
 
 func GetAdmin() error {
@@ -60,6 +64,52 @@ func SendFollowNotificationByID(receiverID string, senderID string) (*ent.Notifi
 	return followNotification, err
 }
 
+func DestroyIllegalRooms() {
+	ticker := time.NewTicker(config.CheckRoomsPeriodicity)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		rooms := G.Room.Query().AllX(G_)
+
+		if len(rooms) == 0 {
+			continue
+		}
+
+		notExistRoomChannel := make(chan string, len(rooms))
+		var wg sync.WaitGroup
+		wg.Add(len(rooms))
+
+		for i, r := range rooms {
+			if (i+1)%config.MaxCallLimit == 0 {
+				time.Sleep(time.Second)
+			}
+			go func(r *ent.Room) {
+				defer wg.Done()
+				if !helper.IsRoomExist(r.ID) {
+					notExistRoomChannel <- r.ID
+				}
+			}(r)
+		}
+
+		wg.Wait()
+		close(notExistRoomChannel)
+
+		var notExistRooms []interface{}
+		for notExistRoom := range notExistRoomChannel {
+			notExistRooms = append(notExistRooms, notExistRoom)
+		}
+
+		if len(notExistRooms) == 0 {
+			continue
+		}
+
+		G.Room.Delete().
+			Where(func(s *sql.Selector) {
+				s.Where(sql.In(room.FieldID, notExistRooms...))
+			}).ExecX(G_)
+	}
+}
+
 var (
 	G     *ent.Client
 	G_    context.Context
@@ -73,11 +123,12 @@ func Init() {
 		log.Fatal(err)
 	}
 	G_ = context.Background()
-	// Run the auto migration tool.
 	if err := G.Schema.Create(G_); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 	if err = GetAdmin(); err != nil {
 		log.Fatal(err)
 	}
+
+	go DestroyIllegalRooms()
 }
